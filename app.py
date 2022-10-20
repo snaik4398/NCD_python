@@ -41,19 +41,7 @@ def submit():
     c=0
     if request.method=='POST':
         a1=int(request.form['age'])
-        if (a1>=30 and a1<=39):
-            c+= 0
-            
-        elif(a1>=40 and a1<=49):
-            c = c+1
-            
-        elif(a1>=50 and a1<=59):
-            c+=2
-            
-        elif (a1>=60):
-            c+=3
-            
-        else:
+        if (a1>3 or a1<0):
             return redirect(url_for('fail',s="invalid input"))
               
 
@@ -66,7 +54,7 @@ def submit():
         if (p3>1 or p3<0):
             return redirect(url_for('fail',s="invalid input"))
         p4=int(request.form['4pp'])
-        if (p4>4 or p4<0):
+        if (p4>3 or p4<0):
             return redirect(url_for('fail',s="invalid input"))
         p5=int(request.form['5pp'])
         if (p5>2 or p5<0):
