@@ -8,6 +8,11 @@ app=Flask(__name__)
 def welcome():
     return render_template('index.html')
 
+@app.route('/back',methods=['POST','GET'])
+def back():
+    if request.method=='POST':
+        return render_template('index.html')
+
 @app.route('/success/<int:score>')
 def success(score):
     res=""
