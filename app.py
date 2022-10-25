@@ -3,15 +3,20 @@
 from flask import Flask,redirect,url_for,render_template,request
 
 app=Flask(__name__)
-
+# welcome page
 @app.route('/')
 def welcome():
-    return render_template('index.html')
-
+    return render_template('signup.html')
+# when we tap to the back button it will go to the index.html page 
 @app.route('/back',methods=['POST','GET'])
 def back():
     if request.method=='POST':
-        return render_template('index.html')
+        return render_template('signup.html')
+
+
+def home():
+    #Moving forward code
+    return redirect(url_for('welcome'))
 
 @app.route('/success/<int:score>')
 def success(score):
@@ -40,6 +45,31 @@ def fail(s):
 #     return redirect(url_for(result,score=marks))
 
 ### Result checker submit html page
+@app.route('/signup',methods=['POST','GET'])
+def signup():
+    nm =" "
+    # age=""
+    email=" "
+    gen1=" "
+    pin=" "
+    dob= " "
+
+    
+    if request.method=='POST':
+        nm=request.form['fname']
+        nm+=" "
+        nm+= request.form['lname']
+
+        gen1=request.form['gender']
+        dob=request.form['birthday']
+        email=request.form['email']
+        pin=request.form['pincode']
+
+
+    
+    return render_template('index.html',nm=nm,gen=gen1,pin=pin,dob=dob,email=email)
+
+
 @app.route('/submit',methods=['POST','GET'])
 def submit():
     total_score=0
