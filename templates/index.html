@@ -7,9 +7,14 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
   </head>
-
+<style>
+.mydiv{
+  border: 5px outset;
+  background-color:#abcf9b;    
+  text-align: center;
+}</style>
   <body>
-    <div class="container-fluid">
+    <div class="container-fluid  mydiv" text-align: center>
 
       <h4>Name:{{nm}}</h4>
       <h4>sex:{{gen}}</h4>
@@ -262,11 +267,7 @@
         </td>
         <td>
           
-          <!-- <select name="score5" id="S5" onchange="para5()">
-            <option value="0">0</option>
-            <option value="1">1</option>
-            
-          </select> -->
+        
           <div>
             <label>input 0/1</label>
             <input type="number" id="5pp" name="5pp" autocomplete="off" />
@@ -319,7 +320,7 @@
     </table>
    
     <button type="submit" class="btn btn-primary">Submit</button>
-    <button type="reset" value="reset">Clear</button>
+    <button type="reset" value="reset" class="btn btn-secondary">Clear</button>
   </form>
   
 </div>
