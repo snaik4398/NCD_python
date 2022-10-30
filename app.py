@@ -4,12 +4,15 @@ import collections
 import email
 from gc import collect
 from lib2to3.pgen2 import pgen
+from math import pi
 from pdb import post_mortem
 from tkinter import Variable
 from typing import Collection
 from unicodedata import name
 from flask import Flask,redirect,url_for,render_template,request
 import pymongo
+import random
+
 
 
 app=Flask(__name__)
@@ -37,20 +40,25 @@ def home():
     
     # return redirect('/')
 
-def emailsave(mail):
-    global email
-    email=mail
+# def emailsave(mail):
+#     global email
+#     email=mail
 
 
-def making_global_info(name,mail,pin,gender,dob):
+def making_global_info(name,mail,pin,gender,dob,id):
 
-    global pemail,pdob,pgender,ppin,pname
+    global pemail,pdob,pgender,ppin,pname,gpid
     pname=name
     pemail=mail
     pdob=dob
     pgender=gender
     ppin=pin
+    gpid=id
 
+def randomPat_id(digits):
+    lower = 10**(digits-1)
+    upper = 10**digits - 1
+    return random.randint(lower, upper)
 
 
 @app.route('/success/<int:score>')
@@ -63,14 +71,14 @@ def success(score):
     else:
         res="NO NEED TO CHECHK UP"
     # here email is a global variable that we are trying to access
-    prev={"email_id":email}
+    prev={"pat_id":gpid}
     nextt={"$set":{"result":res,
                     "score":score             
                 }}
     collections.update_one(prev,nextt)
 
 
-    return render_template('result.html',result=res,sc=score,kk=email)
+    return render_template('result.html',result=res,sc=score,id=gpid)
 
 
 @app.route('/fail/<string:s>')
@@ -86,6 +94,7 @@ def signup():
     gen1=" "
     pin=" "
     dob= " "
+    pat_id=0
 
     # in the form we mention method=POST so the request object need to go by the post methods 
     if request.method=='POST':
@@ -97,23 +106,27 @@ def signup():
         dob=request.form['birthday']
         email1=request.form['email']
         pin=request.form['pincode']
+        pat_id=randomPat_id(14)#will return random patient id of 14 digit every time
+        
 # calling a normal pyhton function to store the  fetching email value (from the form that is created in the signup page) and in that funcion we assign to a global variable email
-    making_global_info(name1,email1,pin,gen1,dob)
-    emailsave(email1)
+    making_global_info(name1,email1,pin,gen1,dob,pat_id)
+    
     # creating a dictionary in pyhton to store it in mongo db as it is similar to jason format so it wll wasy to store in this way 
     # also dictionary is mutable so we can change the stored value
     patient_info_dictionary={
+        'pat_id':pat_id,
         'name':name1,
         'gender':gen1,
         'date_of_birth':dob,
         'email_id':email1,
         'pincode':pin
+        
     }
     # checking the global email variable is initiated or not by by printing it in console
-    print(email)
+    # print(email)
 
     collections.insert_one(patient_info_dictionary)  
-    return render_template('index.html',nm=name1,gen=gen1,pin=pin,dob=dob,email=email)
+    return render_template('index.html',nm=name1,gen=gen1,pin=pin,dob=dob,email=email1,id=pat_id)
 
 
 
